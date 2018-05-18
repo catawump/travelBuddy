@@ -1,0 +1,41 @@
+<html>
+
+<head>
+  <title>Login/Registration</title>
+  <script src='http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js'></script>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4"
+    crossorigin="anonymous">
+  <link rel="stylesheet" href="../static/travel/style.css">
+</head>
+    <body>
+        <h1>Welcome!</h1>
+
+        {% if messages %}
+            {% for message in messages %}
+                <p class="errors">{{message}}</p>
+            {% endfor %}
+        {% endif %}
+
+        <h2>Register</h2>
+        <form action="/register" method="POST">
+            {% csrf_token %}
+            <p>Name: <input type="text" name="name"></p>
+            <p>Username: <input type="text" name="username"></p>
+            <p>Password*: <input type="password" name="password"></p>
+            <p class="notes">* Password should be at least 8 characters</p>
+            <p>Confirm Password: <input type="password" name="confirm_password"></p>
+
+            <input type="submit" value="Register" class="btn btn-primary">
+        </form>
+        <br><br>
+        <h2>Log In</h2>
+        <form action="/login" method="POST">
+            {% csrf_token %}
+            <p>Username: <input type="text" name="username"></p>
+            <p>Password: <input type="password" name="password"></p>
+
+            <input type="submit" value="Log In" class="btn btn-primary">
+        </form>
+
+    </body>
+</html>

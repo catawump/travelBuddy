@@ -1,0 +1,95 @@
+<html>
+
+<head>
+  <title>Travel Dashboard</title>
+  <script src='http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js'></script>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4"
+    crossorigin="anonymous">
+  <link rel="stylesheet" href="../static/travel/style.css">
+</head>
+
+<body>
+
+  <div style="position: fixed; top: 20px; right: 20px; padding: 20px; background-color: #eeeeee; border-radius: 10px;">
+      <a href="/add">
+          <button type="button" class="btn btn-success" style="display: inline-block; margin-right: 20px;">Add Travel Plan</button>
+        </a>
+         
+        <form action="/logout" method="post" style="display: inline-block;">
+          {% csrf_token %}
+          <input type="submit" name="" class="btn btn-danger" style="display: inline-block;" value="Log Out">
+        </form>
+    </div>
+
+  <h1>Hello, {{request.session.name}}!</h1>
+  {% if messages %} {% for message in messages %}
+  <p class="errors">{{message}}</p>
+  {% endfor %} {% endif %}
+
+  <br>
+
+  <h3>Your Trip Schedules</h3>
+
+  {% if mytrips %}
+  <table>
+    <tr>
+      <th>Destination</th>
+      <th>Travel Start Date</th>
+      <th>Travel End Date</th>
+      <th>Travel Plan</th>
+    </tr>
+    {% for trip in mytrips %}
+    <tr>
+      <td><a href="/trip/{{trip.id}}">{{trip.destination}}</a></td>
+      <td>{{trip.travel_start}}</td>
+      <td>{{trip.travel_end}}</td>
+      <td>{{trip.plan}}</td>
+    </tr>
+    {% endfor %}
+  </table>
+  {% endif %}
+
+  {% if not mytrips %}
+    <p>You have not yet created or joined any trips!</p>
+  {% endif %}
+
+<br><br>
+
+<h3>Other User's Travel Plans</h3>
+
+{% if othertrips %}
+  <table>
+    <tr>
+      <th>Name</th>
+      <th>Destination</th>
+      <th>Travel Start Date</th>
+      <th>Travel End Date</th>
+      <th>Travel Plan</th>
+      <th>Do you want to join?</th>
+    </tr>
+    {% for trip in othertrips %}
+    <tr>
+      <td>{{trip.trip_creator.name}}</td>
+      <td><a href="/trip/{{trip.id}}"> {{trip.destination}}</a></td>
+      <td>{{trip.travel_start}}</td>
+      <td>{{trip.travel_end}}</td>
+      <td>{{trip.plan}}</td>
+      <td>
+          <form action="/jointrip/{{trip.id}}" method="post" style="display: inline-block;">
+            {% csrf_token %}
+            <input type="submit" name="" class="btn btn-primary" style="display: inline-block;" value="Join Trip">
+          </form>
+      </td>
+    </tr>
+    {% endfor %}
+  </table>
+  {% endif %}
+
+  {% if not othertrips %}
+  <p>No one else has created any trips! This is very sad... :(</p>
+  {% endif %}
+
+  <br><br>
+</body>
+
+</html>
